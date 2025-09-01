@@ -38,14 +38,40 @@
     </nav>
 
     <header class="hero container-fluid mt-0">
-        <div class="container row m-auto"> 
+        <div class="container row m-auto">
             <div id="left-header-container" class="col-8">
                 <h1>Meu primeiro site de curiosidades</h1>
                 <p>
                     HTML = estrutura • CSS = visual • JS = comportamento. Escolha um tema que você ama (animes, mangás,
                     séries) e compartilhe descobertas! 🎯
                 </p>
-            </div> 
+
+                <!-- Chips de filtro por categoria -->
+                <div id="chips" class="d-flex flex-wrap gap-2 mb-3">
+                    <!-- Criadas dinamicamente no JS -->
+                </div>
+
+                <!-- Busca e ordenação -->
+                <div class="search-card rounded-4 p-3">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text">🔎</span>
+                                <input id="searchInput" type="search" class="form-control"
+                                    placeholder="Buscar curiosidades por título, texto ou tag…" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="sortSelect" class="form-select" aria-label="Ordenar resultados">
+                                <option value="recent">Mais recentes</option>
+                                <option value="alpha">A–Z (título)</option>
+                                <option value="likes">Mais curtidas</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
             <div id="right-header-container" class="col-4">
                 <h3>Como cada parte funciona?</h3>
                 <ul>
@@ -73,16 +99,50 @@
 
 
     </header>
-    <main>
-        <section id="hero">
+    <!-- <main class="container m-auto">
+        <section id="hero" class="container d-flex row m-auto">
+            <div class="card col-3">
+                <img src="./assets/animeimg1.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Animes</h5>
+                    <p class="card-text">Tudo sobre animes! De conhecidos por boa parte das pessoas, até os que têm fãs
+                        contados nos dedos!</p>
+                    <button class="btn btn-primary" type="button">♥</button>
+                    <button class="btn btn-primary" type="button">ver mais</button>
+                </div>
+            </div>
+            <div class="card col-3">
+                <img src="./assets/mangáimg1.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Mangás</h5>
+                    <p class="card-text">Tudo sobre mangás! De conhecidos por boa parte das pessoas, até os que
+                        têm fãs contados nos dedos!</p>
+                    <button class="btn btn-primary" type="button">♥</button>
+                    <button class="btn btn-primary" type="button">ver mais</button>
+                </div>
+            </div>
             <h2>Meu primeiro site de curiosidades</h2>
             <p>Anime</p>
         </section>
+    </main> -->
+    <main class="py-4" id="grid">
+        <div class="container">
+            <div id="cardsRow" class="row g-4">
+                <!-- Cards gerados pelo JS -->
+            </div>
+
+            <div id="emptyState" class="empty-state mt-4 d-none">
+                <h5 class="fw-bold">Nenhum resultado encontrado</h5>
+                <p class="visually-muted mb-2">Tente limpar a busca, trocar a categoria ou <a href="#" class="link-like"
+                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasAdd">adicionar uma nova curiosidade</a>.
+                </p>
+            </div>
+        </div>
     </main>
     <footer>
         <small>Feito com HTML e CSS - Aula 1</small>
     </footer>
-
+    <script src="script.js"></script>
 </body>
 
 </html>
