@@ -32,7 +32,9 @@ const INITIAL_DATA = [
     tags: ['leitura','japão','cultura']
   }
 ];
-
+const LS_ITEMS_KEY = 'curio_items_v1';
+const LS_LIKES_KEY = 'curio_likes_v1';
+const LS_THEME_KEY = 'curio_theme_v1';
 const state = {
   items: [...INITIAL_DATA],
   filters: {
@@ -41,6 +43,29 @@ const state = {
     sort: 'recent' // 'recent' | 'alpha'
   }
 };
+function loadFromStorage(){
+  try{
+    const savedItems = JSON.parse(localStorage.getItem(LS_ITEMS_KEY));
+    const savedLikes = JSON.parse(localStorage.getItem(LS_LIKES_KEY));
+    const savedTheme = localStorage.getItem(LS_THEME_KEY);
+
+    
+    state.items = Array.isArray(savedItems) ? savedItems : INITIAL_DATA;
+    state.likes = savedLikes && typeof savedLikes === 'object' ? savedLikes : {};
+    if(savedTheme){
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      const isDark = savedTheme === 'dark';
+      document.getElementById('themeToggle').setAttribute('aria-pressed', String(isDark));
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+  }catch(e){
+    state.items = INITIAL_DATA;
+    state.likes = {};
+  }
+}
+
+function saveItems(){ localStorage.setItem(LS_ITEMS_KEY, JSON.stringify(state.items)); }
+function saveLikes(){ localStorage.setItem(LS_LIKES_KEY, JSON.stringify(state.likes)); }
 
 // =====================
 // RENDER: CARDS
@@ -101,15 +126,62 @@ function setupInteractions(){
     state.filters.sort = e.target.value;
     renderCards();
   });
+  // Validação Bootstrap + adicionar item
+  const form = document.getElementById('formAdd');
+  form.addEventListener('submit', (event)=>{
+    event.preventDefault();
+    event.stopPropagation();
+    if(!form.checkValidity()){
+      form.classList.add('was-validated');
+      return;
+    }
+    const newItem = {
+      id: 'c' + (Date.now()),
+      title: document.getElementById('fldTitle').value.trim(),
+      text: document.getElementById('fldText').value.trim(),
+      image: document.getElementById('fldImage').value.trim(),
+      category: document.getElementById('fldCategory').value.trim(),
+      tags: document.getElementById('fldTags').value.split(',').map(t=>t.trim()).filter(Boolean)
+    };
+    state.items.push(newItem);
+    saveItems();
+    form.reset();
+    form.classList.remove('was-validated');
+    const canvas = bootstrap.Offcanvas.getOrCreateInstance('#offcanvasAdd');
+    canvas.hide();
+    state.filters.category = 'Todos';
+    document.getElementById('searchInput').value = '';
+    state.filters.search = '';
+    render();
+  });
+
+  // Tema
+  const themeBtn = document.getElementById('themeToggle');
+  themeBtn.addEventListener('click', ()=>{
+    const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem(LS_THEME_KEY, next);
+    themeBtn.setAttribute('aria-pressed', String(next==='dark'));
+    themeBtn.textContent = next==='dark' ? '☀️' : '🌙';
+  });
+}
+
+function render(){
+    renderChips()
+    renderCards()
 }
 
 // =====================
 // STARTUP
 // =====================
 document.addEventListener('DOMContentLoaded', ()=>{
-  renderChips();
-  setupInteractions();
-  renderCards();
+  const toggler = document.querySelector('.navbar-toggler');
+  if(toggler && !toggler.querySelector('span.navbar-toggler-icon')){
+    const span = document.createElement('span');
+    span.className = 'navbar-toggler-icon';
+    toggler.appendChild(span);
+  }
 });
 
 // =====================
@@ -156,3 +228,19 @@ function sortItems(items){
   // 'recent' → manter ordem de inserção (itens mais novos no fim)
   return [...items];
 }
+
+function openDetails(item){
+  document.getElementById('modalTitle').textContent = item.title;
+  document.getElementById('modalText').textContent = item.text;
+  const img = document.getElementById('modalImage');
+  img.src = item.image; img.alt = item.title;
+  const tags = document.getElementById('modalTags');
+  tags.innerHTML = (item.tags||[]).map(t=>`<span class="badge text-bg-secondary">#${t}</span>`).join(' ');
+
+  const modal = new bootstrap.Modal(document.getElementById('modalDetails'));
+  modal.show();
+}
+
+loadFromStorage()
+setupInteractions()
+render()

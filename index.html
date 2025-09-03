@@ -2,8 +2,11 @@
 <html lang="en">
 
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -12,7 +15,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
         <div class="container">
             <a class="navbar-brand" href="#"><strong>Curio</strong>Site</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -20,7 +23,7 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#explorar">Explorar</a>
@@ -30,8 +33,8 @@
                     </li>
                 </ul>
                 <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-outline-dark">🌙</button>
-                    <button type="button" class="btn btn-primary">+ Nova Curiosidade</button>
+<button id="themeToggle" type="button" class="btn btn-outline-dark" aria-pressed="false" title="Alternar tema">🌙</button>
+<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAdd" aria-controls="offcanvasAdd">+ Nova curiosidade</button>
                 </div>
             </div>
         </div>
@@ -39,7 +42,7 @@
 
     <header class="hero container-fluid mt-0">
         <div class="container row m-auto">
-            <div id="left-header-container" class="col-8">
+            <div id="left-header-container" class="align-items-stretch">
                 <h1>Meu primeiro site de curiosidades</h1>
                 <p>
                     HTML = estrutura • CSS = visual • JS = comportamento. Escolha um tema que você ama (animes, mangás,
@@ -72,26 +75,7 @@
                 </div>
 
             </div>
-            <div id="right-header-container" class="col-4">
-                <h3>Como cada parte funciona?</h3>
-                <ul>
-                    <li>
-                        <strong>HTML</strong> é o esqueleto: títulos, parágrafos, imagens e links (as "peças").
-                    </li>
-                    <li>
-                        <strong>CSS</strong> é a roupa: cores, tamanhos, fontes e espaçamentos (o "estilo").
-                    </li>
-                    <li>
-                        <strong>JavaScript</strong> é o cérebro: cliques, buscas, filtros e contadores (as "ações").
-                    </li>
-                </ul>
-
-                <p>
-                    <strong>Dica de design: </strong>escolha uma paleta com 2–3 cores e use bem o espaço em branco.
-                    Títulos
-                    curtos, imagens em boa resolução e textos objetivos deixam tudo mais bonito e legível.
-                </p>
-            </div>
+            
         </div>
 
 
@@ -139,9 +123,73 @@
             </div>
         </div>
     </main>
-    <footer>
-        <small>Feito com HTML e CSS - Aula 1</small>
-    </footer>
+     <!-- ==================== OFFCANVAS: NOVA CURIOSIDADE ==================== -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAdd" aria-labelledby="offcanvasAddLabel">
+    <div class="offcanvas-header">
+      <h5 id="offcanvasAddLabel" class="fw-bold">Adicionar nova curiosidade</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form id="formAdd" class="needs-validation" novalidate>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="fldTitle" placeholder="Título" required>
+          <label for="fldTitle">Título</label>
+          <div class="invalid-feedback">Digite um título.</div>
+        </div>
+        <div class="form-floating mb-3">
+          <textarea class="form-control" id="fldText" style="height: 120px" placeholder="Texto da curiosidade" required></textarea>
+          <label for="fldText">Texto da curiosidade</label>
+          <div class="invalid-feedback">Digite um texto curto.</div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="url" class="form-control" id="fldImage" placeholder="URL da imagem (https://...)" required>
+          <label for="fldImage">URL da imagem (https://…)</label>
+          <div class="invalid-feedback">Forneça um link de imagem válido.</div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="fldCategory" placeholder="Categoria (ex.: Animes, Animais, Astronomia)" required>
+          <label for="fldCategory">Categoria (ex.: Animes, Animais, Astronomia)</label>
+          <div class="invalid-feedback">Informe uma categoria.</div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="fldTags" placeholder="Tags separadas por vírgula (ex.: gato, ronronar)" />
+          <label for="fldTags">Tags separadas por vírgula (ex.: gato, ronronar)</label>
+        </div>
+        <div class="d-grid">
+          <button class="btn btn-primary" type="submit">Adicionar ao site</button>
+        </div>
+      </form>
+      <p class="small visually-muted mt-3">Dica: use imagens livres (Unsplash, Pexels) e cite a fonte se necessário.</p>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: DETALHES ==================== -->
+  <div class="modal fade" id="modalDetails" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content" style="background:var(--panel)">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Título</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <img id="modalImage" class="img-fluid rounded mb-3" alt="Imagem da curiosidade" />
+          <p id="modalText"></p>
+          <div class="d-flex gap-2 flex-wrap" id="modalTags"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer py-4 mt-4">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <p class="mb-0 visually-muted">Feito com HTML, CSS, JS e Bootstrap • Salva preferências no seu navegador (LocalStorage)</p>
+      <a class="link-like" href="#" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">Voltar ao topo ↑</a>
+    </div>
+  </footer>
     <script src="script.js"></script>
 </body>
 
